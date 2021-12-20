@@ -1,18 +1,18 @@
 from unittest import skip
 
-
-from django.http import HttpRequest
 from django.contrib.auth.models import User
-from core.models import Category, Product
-from django.urls import reverse
+from django.http import HttpRequest
 from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
 
-from core.views import all_products
+from core.models import Category, Product
+from core.views import product_all
 
-#@skip("demonstrating skipping")
-#class TestSkip(TestCase):
-#    def test_skip_example(self):
-#        pass
+
+@skip("demonstrating skipping")
+class TestSkip(TestCase):
+    def test_skip_example(self):
+        pass
 
 
 class TestViewResponses(TestCase):
@@ -28,36 +28,57 @@ class TestViewResponses(TestCase):
         """
         Test allowed hosts
         """
+        response = self.c.get('/', HTTP_HOST='noaddress.com')
+        self.assertEqual(response.status_code, 400)
+        response = self.c.get('/', HTTP_HOST='yourdomain.com')
+        self.assertEqual(response.status_code, 200)
+
+    def test_homepage_url(self):
+        """
+        Test homepage response status
+        """
         response = self.c.get('/')
         self.assertEqual(response.status_code, 200)
 
+    
+    def test_product_list_url(self):
+        """
+        Test category response status
+        """
+        response = self.c.get(
+            reverse('core:category_list', args=['django']))
+        self.assertEqual(response.status_code, 200)
+        
+    
+    
     def test_product_detail_url(self):
         """
         Test Product response status
         """
-        response = self.c.get(reverse('core:product_detail', args=['django-beginners']))
+        response = self.c.get(
+            reverse('core:product_detail', args=['django-beginners']))
         self.assertEqual(response.status_code, 200)
 
-    def test_category_detail_url(self):
-        """
-        Test Category response status
-        """
-        response = self.c.get(reverse('core:category_list', args=['django']))
-        self.assertEqual(response.status_code, 200)
+    
 
     def test_homepage_html(self):
+        """
+        Example: code validation, search HTML for text
+        """
         request = HttpRequest()
-        response = all_products(request)
+        response = product_all(request)
         html = response.content.decode('utf8')
-        print(html)
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>Loja</title>', html)
         self.assertTrue(html.startswith('\n<!DOCTYPE html>\n'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_function(self):
-        request = self.factory.get('/item/django-beginners')
-        response = all_products(request)
+        """
+        Example: Using request factory
+        """
+        request = self.factory.get('/django-beginners')
+        response = product_all(request)
         html = response.content.decode('utf8')
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>Loja</title>', html)
         self.assertTrue(html.startswith('\n<!DOCTYPE html>\n'))
         self.assertEqual(response.status_code, 200)
