@@ -21,7 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls', namespace='core')),
-    path('basket', include('basket.urls', namespace='basket')),
+    path('basket/', include('basket.urls', namespace='basket')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
