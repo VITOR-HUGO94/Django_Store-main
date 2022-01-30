@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'basket',
+    'account',
+    'orders',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -79,8 +82,12 @@ WSGI_APPLICATION = 'django_store.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_ecomm',
+        'USER': 'dev1',
+        'PASSWORD': 'dev194',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -129,6 +136,25 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+
+# Basket session ID
+BASKET_SESSION_ID = 'basket'
+
+# Stripe Payment
+# PUBLISHABLE_KEY = ''
+# SECRET_KEY = ''
+# STRIPE_ENDPOINT_SECRET = ''
+# stripe listen --forward-to localhost:8000/payment/webhook/
+
+# Custom user model
+AUTH_USER_MODEL = 'account.UserBase'
+LOGIN_REDIRECT_URL = '/account/dashboard'
+LOGIN_URL = '/account/login/'
+
+# Email setting
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
