@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}Loja{% endblock %}</title>
@@ -14,8 +13,7 @@
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'basket/css/basket.css' %}">
-
+    {% block stylesheet%}{% endblock %}
 </head>
 
 
@@ -43,7 +41,7 @@
                                     </svg></i>
                             </a>
                             <ul class="dropdown-menu rounded-0 border-0" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url "core:product_all" %}">All</a></li>
+                                <li><a class="dropdown-item" href="{% url "core:store_home" %}">All</a></li>
                                 {% for c in categories %}
                                 <li {% if category.slug == c.slug %}class="selected" {% endif %}>
                                     <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
@@ -131,7 +129,7 @@
                 <div class="d-md-none d-lg-none d-xl-none">
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                            <li><a class="dropdown-item" href="{% url "core:product_all" %}">All</a></li>
+                            <li><a class="dropdown-item" href="{% url "core:store_home" %}">All</a></li>
                             {% for c in categories %}
                             <li {% if category.slug == c.slug %}class="selected" {% endif %}>
                                 <a class="dropdown-item" href="{{ c.get_absolute_url }}">{{ c.name|title }}</a>
@@ -148,8 +146,10 @@
             </div>
         </nav>
     </header>
+    <main>
+        <div id="content">{% block content %} {% endblock %}</div>
 
-    <div id="content">{% block content %} {% endblock %}</div>
+    </main>
 
     <footer class="container py-5 footer">
         <hr>
